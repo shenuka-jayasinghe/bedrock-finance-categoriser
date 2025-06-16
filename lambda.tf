@@ -1,6 +1,6 @@
 # Lambda function
 resource "aws_lambda_function" "statement_processor" {
-  depends_on = [null_resource.lambda_dependencies]
+  depends_on    = [null_resource.lambda_dependencies]
   filename      = "${path.module}/lambda_function.zip"
   function_name = "${local.name_prefix}-statement-processor"
   role          = aws_iam_role.lambda_execution_role.arn
@@ -21,11 +21,6 @@ resource "aws_lambda_function" "statement_processor" {
       OPEN_TABLE_BUCKET       = aws_s3_bucket.open_table_bucket.bucket
     }
   }
-
-  depends_on = [
-    aws_iam_role_policy_attachment.lambda_basic_execution,
-    aws_cloudwatch_log_group.lambda_logs,
-  ]
 
   tags = local.common_tags
 }
@@ -56,7 +51,7 @@ pip install \
   --upgrade \
   boto3 pandas \
   -t lambda_package/
-cd lambda_package && zip -r ../../lambda_function.zip .
+cd lambda_package && zip -r ../../lambda_function.zip . -i .
 EOF
   }
 
@@ -65,9 +60,9 @@ EOF
   }
 }
 
-# data "archive_file" "lambda_zip" {
-#   type        = "zip"
-#   source_dir  = "${}lambda_package"
-#   output_path = "lambda_function.zip"
-#   depends_on  = [null_resource.lambda_dependencies]
-# }
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_dir  = "${path.module}/lambda/lambda_package"
+  output_path = "lambda_function.zip"
+  depends_on  = [null_resource.lambda_dependencies]
+}

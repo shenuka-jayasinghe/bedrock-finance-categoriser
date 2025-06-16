@@ -7,7 +7,7 @@ from numpy._core._multiarray_umath import (
     __cpu_dispatch__,
 )
 
-__all__ = ["show"]
+__all__ = ["show_config"]
 _built_with_meson = True
 
 
@@ -31,9 +31,9 @@ CONFIG = _cleanup(
     {
         "Compilers": {
             "c": {
-                "name": "clang",
-                "linker": r"ld64",
-                "version": "15.0.0",
+                "name": "gcc",
+                "linker": r"ld.bfd",
+                "version": "10.2.1",
                 "commands": r"cc",
                 "args": r"",
                 "linker args": r"",
@@ -41,15 +41,15 @@ CONFIG = _cleanup(
             "cython": {
                 "name": "cython",
                 "linker": r"cython",
-                "version": "3.0.11",
+                "version": "3.1.0",
                 "commands": r"cython",
                 "args": r"",
                 "linker args": r"",
             },
             "c++": {
-                "name": "clang",
-                "linker": r"ld64",
-                "version": "15.0.0",
+                "name": "gcc",
+                "linker": r"ld.bfd",
+                "version": "10.2.1",
                 "commands": r"c++",
                 "args": r"",
                 "linker args": r"",
@@ -57,44 +57,44 @@ CONFIG = _cleanup(
         },
         "Machine Information": {
             "host": {
-                "cpu": "aarch64",
-                "family": "aarch64",
+                "cpu": "x86_64",
+                "family": "x86_64",
                 "endian": "little",
-                "system": "darwin",
+                "system": "linux",
             },
             "build": {
-                "cpu": "aarch64",
-                "family": "aarch64",
+                "cpu": "x86_64",
+                "family": "x86_64",
                 "endian": "little",
-                "system": "darwin",
+                "system": "linux",
             },
             "cross-compiled": bool("False".lower().replace("false", "")),
         },
         "Build Dependencies": {
             "blas": {
-                "name": "accelerate",
+                "name": "scipy-openblas",
                 "found": bool("True".lower().replace("false", "")),
-                "version": "unknown",
-                "detection method": "system",
-                "include directory": r"unknown",
-                "lib directory": r"unknown",
-                "openblas configuration": r"unknown",
-                "pc file directory": r"unknown",
+                "version": "0.3.29",
+                "detection method": "pkgconfig",
+                "include directory": r"/opt/_internal/cpython-3.11.10/lib/python3.11/site-packages/scipy_openblas64/include",
+                "lib directory": r"/opt/_internal/cpython-3.11.10/lib/python3.11/site-packages/scipy_openblas64/lib",
+                "openblas configuration": r"OpenBLAS 0.3.29  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+                "pc file directory": r"/project/.openblas",
             },
             "lapack": {
-                "name": "accelerate",
+                "name": "scipy-openblas",
                 "found": bool("True".lower().replace("false", "")),
-                "version": "unknown",
-                "detection method": "system",
-                "include directory": r"unknown",
-                "lib directory": r"unknown",
-                "openblas configuration": r"unknown",
-                "pc file directory": r"unknown",
+                "version": "0.3.29",
+                "detection method": "pkgconfig",
+                "include directory": r"/opt/_internal/cpython-3.11.10/lib/python3.11/site-packages/scipy_openblas64/include",
+                "lib directory": r"/opt/_internal/cpython-3.11.10/lib/python3.11/site-packages/scipy_openblas64/lib",
+                "openblas configuration": r"OpenBLAS 0.3.29  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64",
+                "pc file directory": r"/project/.openblas",
             },
         },
         "Python Information": {
-            "path": r"/private/var/folders/4d/0gnh84wj53j7wyk695q0tc_80000gn/T/build-env-kq4kuj35/bin/python",
-            "version": "3.9",
+            "path": r"/tmp/build-env-nx8g0bo7/bin/python",
+            "version": "3.11",
         },
         "SIMD Extensions": {
             "baseline": __cpu_baseline__,
@@ -160,3 +160,11 @@ def show(mode=DisplayModes.stdout.value):
         raise AttributeError(
             f"Invalid `mode`, use one of: {', '.join([e.value for e in DisplayModes])}"
         )
+
+
+def show_config(mode=DisplayModes.stdout.value):
+    return show(mode)
+
+
+show_config.__doc__ = show.__doc__
+show_config.__module__ = "numpy"
