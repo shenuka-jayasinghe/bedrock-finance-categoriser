@@ -45,10 +45,18 @@ resource "null_resource" "lambda_dependencies" {
   provisioner "local-exec" {
     command = <<EOF
 cd lambda
+rm -rf lambda_package
 mkdir -p lambda_package
 cp lambda_function.py lambda_package/
-pip install boto3 pandas -t lambda_package/
-cd lambda_package && zip -r ../../lambda_function.zip . -i .
+pip install \
+  --platform manylinux2014_x86_64 \
+  --implementation cp \
+  --python-version 3.11 \
+  --only-binary=:all: \
+  --upgrade \
+  boto3 pandas \
+  -t lambda_package/
+cd lambda_package && zip -r ../../lambda_function.zip .
 EOF
   }
 
