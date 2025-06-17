@@ -49,8 +49,8 @@ resource "aws_s3_bucket_notification" "trigger_lambda" {
   lambda_function {
     lambda_function_arn = aws_lambda_function.statement_processor.arn
     events              = ["s3:ObjectCreated:*"]
-    filter_prefix       = ""     # Optional: set if your CSVs are in a subfolder like "statements/"
-    filter_suffix       = ".csv" # Optional: trigger only for .csv files
+    filter_prefix       = var.s3_trigger_prefix
+    filter_suffix       = var.s3_trigger_suffix
   }
 
   depends_on = [
