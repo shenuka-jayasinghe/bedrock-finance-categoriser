@@ -2,13 +2,15 @@
 resource "aws_s3_bucket" "statements_bucket" {
   bucket = "${local.name_prefix}-bank-statements-${random_string.bucket_suffix.result}"
 
-  tags = local.common_tags
+  tags          = local.common_tags
+  force_destroy = true
 }
 
 resource "aws_s3_bucket" "open_table_bucket" {
   bucket = "${local.name_prefix}-open-table-${random_string.bucket_suffix.result}"
 
-  tags = local.common_tags
+  tags          = local.common_tags
+  force_destroy = true
 }
 
 resource "random_string" "bucket_suffix" {

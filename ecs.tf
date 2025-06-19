@@ -10,7 +10,7 @@ resource "aws_ecs_cluster" "main" {
 
 resource "aws_security_group" "ecs_tasks" {
   name   = "${local.name_prefix}-ecs-tasks"
-  vpc_id = data.aws_vpc.default.id
+  vpc_id = var.vpc_id
 
   egress {
     from_port   = 0

@@ -164,8 +164,8 @@ resource "aws_iam_role_policy" "ecs_task_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
-        Action = ["s3:GetObject"]
+        Effect   = "Allow"
+        Action   = ["s3:GetObject"]
         Resource = "${aws_s3_bucket.statements_bucket.arn}/*"
       },
       {
@@ -180,8 +180,8 @@ resource "aws_iam_role_policy" "ecs_task_policy" {
         Resource = "*"
       },
       {
-        Effect = "Allow"
-        Action = ["bedrock:InvokeModel"]
+        Effect   = "Allow"
+        Action   = ["bedrock:InvokeModel"]
         Resource = "arn:aws:bedrock:${data.aws_region.current.name}::foundation-model/anthropic.claude-3-haiku-20240307-v1:0"
       }
     ]
@@ -197,8 +197,8 @@ resource "aws_iam_role_policy" "lambda_run_ecs" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
-        Action = ["ecs:RunTask"]
+        Effect   = "Allow"
+        Action   = ["ecs:RunTask"]
         Resource = aws_ecs_task_definition.transaction_processor.arn
       },
       {

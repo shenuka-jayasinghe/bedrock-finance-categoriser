@@ -6,7 +6,7 @@ set -e
 # Configuration - Update these values
 AWS_REGION="eu-west-1"
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-ECR_REPOSITORY_NAME="transaction-processor"
+ECR_REPOSITORY_NAME="sj-bank-analytics-dev-transaction-processor"
 IMAGE_TAG="latest"
 
 # Full ECR repository URI

@@ -13,7 +13,7 @@ resource "aws_lambda_function" "statement_processor" {
     variables = {
       ECS_CLUSTER_ARN     = aws_ecs_cluster.main.arn
       TASK_DEFINITION_ARN = aws_ecs_task_definition.transaction_processor.arn
-      SUBNETS             = join(",", data.aws_subnets.default.ids)
+      SUBNETS             = join(",", var.private_subnets)
       SECURITY_GROUP      = aws_security_group.ecs_tasks.id
       DYNAMODB_TABLE      = aws_dynamodb_table.transactions.name
     }
