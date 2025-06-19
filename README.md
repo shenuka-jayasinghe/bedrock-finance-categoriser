@@ -13,3 +13,21 @@ Ensure you are authenticated with AWS CLI before running the script.
 
 After pushing the image, run `terraform init` and `terraform apply` to create the infrastructure. Uploading a file to the statements S3 bucket will trigger the Lambda which starts an ECS task. The task will shut itself down when processing is complete.
 
+## Frontend Dashboard
+
+The `frontend` directory contains a simple Svelte dashboard that fetches
+transaction data from the API and displays expenses by category in a bar chart.
+
+To run the dashboard locally:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open <http://localhost:5173> in your browser.
+
+The API Gateway configuration now enables CORS so the frontend can fetch
+transaction data directly from the browser.
+
