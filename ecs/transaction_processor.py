@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 # Environment variables
 DYNAMODB_TABLE = os.environ['DYNAMODB_TABLE']
 # Support either AWS_REGION or AWS_DEFAULT_REGION
-AWS_REGION = os.environ.get('AWS_REGION', os.environ.get('AWS_DEFAULT_REGION', 'us-east-1'))
+AWS_REGION = os.environ.get('AWS_REGION', os.environ.get('AWS_DEFAULT_REGION', 'eu-west-1'))
 S3_BUCKET = os.environ.get('S3_BUCKET')
 S3_KEY = os.environ.get('S3_KEY')
 
