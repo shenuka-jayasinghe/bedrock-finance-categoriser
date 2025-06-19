@@ -30,4 +30,3 @@ Then open <http://localhost:5173> in your browser.
 
 The API Gateway configuration now enables CORS so the frontend can fetch
 transaction data directly from the browser.
-
