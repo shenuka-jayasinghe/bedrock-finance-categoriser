@@ -45,10 +45,116 @@ resource "aws_api_gateway_resource" "transaction" {
   path_part   = "transaction"
 }
 
+resource "aws_api_gateway_method" "options_transaction" {
+  rest_api_id   = aws_api_gateway_rest_api.transactions_api.id
+  resource_id   = aws_api_gateway_resource.transaction.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "options_transaction" {
+  rest_api_id = aws_api_gateway_rest_api.transactions_api.id
+  resource_id = aws_api_gateway_resource.transaction.id
+  http_method = aws_api_gateway_method.options_transaction.http_method
+
+  type = "MOCK"
+
+  request_templates = {
+    "application/json" = "{ \"statusCode\": 200 }"
+  }
+}
+
+resource "aws_api_gateway_method_response" "options_transaction" {
+  rest_api_id = aws_api_gateway_rest_api.transactions_api.id
+  resource_id = aws_api_gateway_resource.transaction.id
+  http_method = aws_api_gateway_method.options_transaction.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+}
+
+resource "aws_api_gateway_integration_response" "options_transaction" {
+  rest_api_id = aws_api_gateway_rest_api.transactions_api.id
+  resource_id = aws_api_gateway_resource.transaction.id
+  http_method = aws_api_gateway_method.options_transaction.http_method
+  status_code = aws_api_gateway_method_response.options_transaction.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Headers" = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+  }
+
+  response_templates = {
+    "application/json" = ""
+  }
+}
+
 resource "aws_api_gateway_resource" "transactions" {
   rest_api_id = aws_api_gateway_rest_api.transactions_api.id
   parent_id   = aws_api_gateway_rest_api.transactions_api.root_resource_id
   path_part   = "transactions"
+}
+
+resource "aws_api_gateway_method" "options_transactions" {
+  rest_api_id   = aws_api_gateway_rest_api.transactions_api.id
+  resource_id   = aws_api_gateway_resource.transactions.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "options_transactions" {
+  rest_api_id = aws_api_gateway_rest_api.transactions_api.id
+  resource_id = aws_api_gateway_resource.transactions.id
+  http_method = aws_api_gateway_method.options_transactions.http_method
+
+  type = "MOCK"
+
+  request_templates = {
+    "application/json" = "{ \"statusCode\": 200 }"
+  }
+}
+
+resource "aws_api_gateway_method_response" "options_transactions" {
+  rest_api_id = aws_api_gateway_rest_api.transactions_api.id
+  resource_id = aws_api_gateway_resource.transactions.id
+  http_method = aws_api_gateway_method.options_transactions.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+}
+
+resource "aws_api_gateway_integration_response" "options_transactions" {
+  rest_api_id = aws_api_gateway_rest_api.transactions_api.id
+  resource_id = aws_api_gateway_resource.transactions.id
+  http_method = aws_api_gateway_method.options_transactions.http_method
+  status_code = aws_api_gateway_method_response.options_transactions.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Headers" = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+  }
+
+  response_templates = {
+    "application/json" = ""
+  }
 }
 
 resource "aws_api_gateway_method" "get_transaction" {
@@ -112,6 +218,12 @@ resource "aws_api_gateway_method_response" "list_transactions" {
   http_method = aws_api_gateway_method.list_transactions.http_method
   status_code = "200"
 
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+
   response_models = {
     "application/json" = "Empty"
   }
@@ -126,6 +238,12 @@ resource "aws_api_gateway_integration_response" "list_transactions" {
   response_templates = {
     "application/json" = ""
   }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Headers" = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+  }
 }
 
 resource "aws_api_gateway_method_response" "get_transaction" {
@@ -133,6 +251,12 @@ resource "aws_api_gateway_method_response" "get_transaction" {
   resource_id = aws_api_gateway_resource.transaction.id
   http_method = aws_api_gateway_method.get_transaction.http_method
   status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
 
   response_models = {
     "application/json" = "Empty"
@@ -148,12 +272,20 @@ resource "aws_api_gateway_integration_response" "get_transaction" {
   response_templates = {
     "application/json" = ""
   }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Headers" = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+  }
 }
 
 resource "aws_api_gateway_deployment" "transactions_api" {
   depends_on = [
     aws_api_gateway_integration.get_transaction,
-    aws_api_gateway_integration.list_transactions
+    aws_api_gateway_integration.list_transactions,
+    aws_api_gateway_integration.options_transactions,
+    aws_api_gateway_integration.options_transaction
   ]
   rest_api_id = aws_api_gateway_rest_api.transactions_api.id
   stage_name  = var.environment
