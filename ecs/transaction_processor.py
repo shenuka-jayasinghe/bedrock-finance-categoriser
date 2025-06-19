@@ -16,17 +16,19 @@ import io
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize AWS clients
-s3_client = boto3.client('s3')
-dynamodb = boto3.resource('dynamodb')
-bedrock_client = boto3.client('bedrock-runtime')
-ecs_client = boto3.client('ecs')
-
 # Environment variables
 DYNAMODB_TABLE = os.environ['DYNAMODB_TABLE']
-AWS_REGION = os.environ.get('AWS_DEFAULT_REGION', 'us-east-1')
+# Support either AWS_REGION or AWS_DEFAULT_REGION
+AWS_REGION = os.environ.get('AWS_REGION', os.environ.get('AWS_DEFAULT_REGION', 'us-east-1'))
 S3_BUCKET = os.environ.get('S3_BUCKET')
 S3_KEY = os.environ.get('S3_KEY')
+
+# Initialize AWS clients using explicit region to avoid configuration issues
+session = boto3.Session(region_name=AWS_REGION)
+s3_client = session.client('s3')
+dynamodb = session.resource('dynamodb')
+bedrock_client = session.client('bedrock-runtime')
+ecs_client = session.client('ecs')
 
 # Get DynamoDB table
 table = dynamodb.Table(DYNAMODB_TABLE)
