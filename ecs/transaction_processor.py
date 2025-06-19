@@ -49,7 +49,8 @@ CATEGORIES = [
     "Home (furniture, appliances, DIY, home improvement)",
     "Personal (haircut, beauty, clothing, personal care)",
     "Education (books, courses, training, school fees)",
-    "Travel (holidays, hotels, flights, travel insurance)"
+    "Travel (holidays, hotels, flights, travel insurance)",
+    "Housing (Rent, mortgage)"
 ]
 
 def get_task_arn():
