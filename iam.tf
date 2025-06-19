@@ -183,6 +183,14 @@ resource "aws_iam_role_policy" "ecs_task_policy" {
         Effect   = "Allow"
         Action   = ["bedrock:InvokeModel"]
         Resource = "arn:aws:bedrock:${data.aws_region.current.name}::foundation-model/anthropic.claude-3-haiku-20240307-v1:0"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecs:StopTask",
+          "ecs:DescribeTasks"
+        ]
+        Resource = "*"
       }
     ]
   })

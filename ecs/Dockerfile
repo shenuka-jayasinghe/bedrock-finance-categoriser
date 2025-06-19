@@ -1,4 +1,5 @@
-FROM python:3.9-slim
+# Force amd64 platform so images work on x86 Fargate
+FROM --platform=linux/amd64 python:3.9-slim
 
 # Set working directory
 WORKDIR /app
