@@ -38,5 +38,13 @@ variable "s3_trigger_prefix" {
 variable "s3_trigger_suffix" {
   description = "S3 object key suffix to trigger Lambda"
   type        = string
-  default     = ".pdf"
+  default     = ".csv"
+}
+
+variable "vpc_id" {
+  type = string
+}
+
+variable "private_subnets" {
+  type = list(string)
 }
