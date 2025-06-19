@@ -173,9 +173,16 @@ def get_unprocessed_transactions(transactions: List[Dict], file_name: str) -> Li
             if 'Item' not in response:
                 # Transaction doesn't exist, add to unprocessed
                 unprocessed.append(transaction)
-            elif response['Item'].get('processed') != 'true':
-                # Transaction exists but not processed
-                unprocessed.append(transaction)
+            else:
+                item = response['Item']
+                if item.get('processed') != 'true' or item.get('category') == 'Uncategorized':
+                    # Transaction exists but not processed or uncategorized
+                    logger.info(
+                        f"Reprocessing {transaction['transaction_id']} due to status 'Uncategorized'"
+                        if item.get('category') == 'Uncategorized' else
+                        f"Found unprocessed {transaction['transaction_id']}"
+                    )
+                    unprocessed.append(transaction)
                 
         return unprocessed
         
@@ -416,7 +423,12 @@ def update_dynamodb_batch(transactions: List[Dict], file_name: str):
             if transaction_id not in unique_transactions:
                 unique_transactions[transaction_id] = txn
             else:
-                logger.warning(f"Duplicate transaction_id found: {transaction_id}, keeping first occurrence")
+                existing = unique_transactions[transaction_id]
+                if existing.get('category') == 'Uncategorized' and txn.get('category') != 'Uncategorized':
+                    logger.info(f"Replacing uncategorized duplicate for {transaction_id}")
+                    unique_transactions[transaction_id] = txn
+                else:
+                    logger.warning(f"Duplicate transaction_id found: {transaction_id}, keeping first occurrence")
         
         unique_txn_list = list(unique_transactions.values())
         logger.info(f"Processing {len(unique_txn_list)} unique transactions (removed {len(transactions) - len(unique_txn_list)} duplicates)")
@@ -426,7 +438,22 @@ def update_dynamodb_batch(transactions: List[Dict], file_name: str):
         
         for i in range(0, len(unique_txn_list), batch_size):
             batch = unique_txn_list[i:i + batch_size]
-            
+
+            # Retry classification for any Uncategorized transactions in this batch
+            uncategorized = [txn for txn in batch if txn.get('category') == 'Uncategorized']
+            if uncategorized:
+                logger.info(f"Retrying classification for {len(uncategorized)} Uncategorized transactions")
+                try:
+                    reclassified = classify_transactions_batch(uncategorized)
+                    reclassified_map = {t['transaction_id']: t for t in reclassified}
+                    for txn in batch:
+                        if txn['transaction_id'] in reclassified_map:
+                            updated = reclassified_map[txn['transaction_id']]
+                            txn['category'] = updated.get('category', txn['category'])
+                            txn['classified_at'] = updated.get('classified_at', txn.get('classified_at'))
+                except Exception as e:
+                    logger.error(f"Reclassification failed: {e}")
+
             # Further deduplication within batch to be extra safe
             batch_items = {}
             for txn in batch:
