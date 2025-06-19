@@ -190,7 +190,8 @@ resource "aws_iam_role_policy" "ecs_task_policy" {
           "ecs:StopTask",
           "ecs:DescribeTasks"
         ]
-        Resource = "*"
+        Resource = "arn:aws:ecs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:task/${aws_ecs_cluster.main.name}/*"
+
       }
     ]
   })
