@@ -12,3 +12,7 @@ npm run dev
 ```
 
 Open <http://localhost:5173> in your browser to view the dashboard.
+
+The dashboard expects the API to return a JSON object with an `Items` array in
+the DynamoDB attribute format. If your API URL differs, update the fetch call in
+`src/App.svelte`.

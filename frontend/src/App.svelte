@@ -6,10 +6,14 @@
   let categories = {};
 
   onMount(async () => {
-    const res = await fetch('https://p6kcw3gkqc.execute-api.eu-west-1.amazonaws.com/dev/transactions');
+    const res = await fetch(
+      'https://p6kcw3gkqc.execute-api.eu-west-1.amazonaws.com/dev/transactions'
+    );
     const data = await res.json();
 
-    data.forEach(item => {
+    const items = Array.isArray(data) ? data : data.Items || [];
+
+    items.forEach((item) => {
       const cat = item.category.S;
       const debit = parseFloat(item.debit_amount.S || '0');
       if (!categories[cat]) categories[cat] = 0;
