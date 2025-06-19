@@ -49,3 +49,18 @@ output "open_table_bucket_arn" {
   description = "ARN of the S3 bucket for open table format (Athena queries)"
   value       = aws_s3_bucket.open_table_bucket.arn
 }
+
+output "ecs_cluster_name" {
+  description = "Name of the ECS cluster"
+  value       = aws_ecs_cluster.main.name
+}
+
+output "ecs_task_definition_arn" {
+  description = "ARN of the ECS task definition"
+  value       = aws_ecs_task_definition.transaction_processor.arn
+}
+
+output "ecr_repository_url" {
+  description = "URL of the ECR repository"
+  value       = aws_ecr_repository.transaction_processor.repository_url
+}
