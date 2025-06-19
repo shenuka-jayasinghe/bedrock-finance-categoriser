@@ -1,6 +1,7 @@
 resource "aws_ecr_repository" "transaction_processor" {
-  name = "${local.name_prefix}-transaction-processor"
-  tags = local.common_tags
+  name         = "${local.name_prefix}-transaction-processor"
+  tags         = local.common_tags
+  force_delete = true
 }
 
 resource "aws_ecs_cluster" "main" {
