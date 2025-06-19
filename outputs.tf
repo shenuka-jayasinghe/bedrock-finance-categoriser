@@ -64,3 +64,8 @@ output "ecr_repository_url" {
   description = "URL of the ECR repository"
   value       = aws_ecr_repository.transaction_processor.repository_url
 }
+
+output "transactions_api_url" {
+  description = "Invoke URL for the transactions API"
+  value       = aws_api_gateway_deployment.transactions_api.invoke_url
+}
