@@ -5,6 +5,14 @@
   let canvas;
   let categories = {};
 
+  function parseAmount(str) {
+    if (!str) return 0;
+    // Remove common currency symbols and commas before parsing
+    const cleaned = str.replace(/[^0-9+\-\.]/g, '');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : num;
+  }
+
   onMount(async () => {
     const res = await fetch(
       'https://p6kcw3gkqc.execute-api.eu-west-1.amazonaws.com/dev/transactions'
@@ -15,29 +23,40 @@
 
     items.forEach((item) => {
       const cat = item.category.S;
-      const debit = parseFloat(item.debit_amount.S || '0');
-      if (!categories[cat]) categories[cat] = 0;
-      categories[cat] += debit;
+      const debit = parseAmount(item.debit_amount?.S);
+      const credit = parseAmount(item.credit_amount?.S);
+
+      if (!categories[cat]) categories[cat] = { debit: 0, credit: 0 };
+      categories[cat].debit += debit;
+      categories[cat].credit += credit;
     });
 
     const labels = Object.keys(categories);
-    const values = Object.values(categories);
+    const debitValues = labels.map((l) => categories[l].debit);
+    const creditValues = labels.map((l) => categories[l].credit);
 
     new Chart(canvas, {
       type: 'bar',
       data: {
         labels,
-        datasets: [{
-          label: 'Expenses',
-          data: values,
-          backgroundColor: 'rgba(54, 162, 235, 0.5)'
-        }]
+        datasets: [
+          {
+            label: 'Debits',
+            data: debitValues,
+            backgroundColor: 'rgba(54, 162, 235, 0.5)'
+          },
+          {
+            label: 'Credits',
+            data: creditValues,
+            backgroundColor: 'rgba(255, 99, 132, 0.5)'
+          }
+        ]
       },
       options: {
         scales: {
           y: {
             beginAtZero: true,
-            title: { display: true, text: 'Expense' }
+            title: { display: true, text: 'Amount' }
           }
         }
       }
