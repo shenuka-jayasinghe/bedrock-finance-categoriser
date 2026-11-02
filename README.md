@@ -1,5 +1,7 @@
 # Personal Finance MCP Deployment
 
+
+
 This Terraform configuration deploys the resources required to process bank statement files.
 
 ## Building the ECS Image
